@@ -1,0 +1,33 @@
+############################################################
+# Dockerfile to build a Python app
+# Based on Ubuntu
+############################################################
+
+# Set the base image to Ubuntu
+FROM ubuntu:12.04
+# File Author / Maintainer
+MAINTAINER Christian Barra <barrachri@gmail.com>
+RUN apt-get update
+RUN apt-get install -y build-essential git python python-dev python-setuptools supervisor python-pip nginx
+
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+RUN rm /etc/nginx/sites-enabled/default
+
+ADD ./ /app
+
+RUN ln -s /app/conf/appserver /etc/nginx/sites-enabled/
+RUN ln -s /app/conf/supervisord.conf /etc/supervisor/conf.d/
+
+# run pip install
+RUN pip install uwsgi
+run pip install -r /app/requirements.txt
+
+
+VOLUME /app
+VOLUME /etc/nginx/sites-enabled
+VOLUME /var/log/nginx
+
+# Port to expose
+EXPOSE 80
+
+CMD ["supervisord", "-n"]
