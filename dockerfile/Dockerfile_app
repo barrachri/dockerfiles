@@ -13,7 +13,7 @@ RUN apt-get install -y build-essential git python python-dev python-setuptools s
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 RUN rm /etc/nginx/sites-enabled/default
 
-ADD /app /app
+ADD ./ /app
 
 #copy file from repo
 ADD https://raw.githubusercontent.com/barrachri/dockerfiles/master/conf/appserver /etc/nginx/sites-enabled/
