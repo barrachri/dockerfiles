@@ -22,7 +22,7 @@ ADD https://raw.githubusercontent.com/barrachri/dockerfiles/master/conf/uwsgi.in
 
 # run pip install
 RUN pip install uwsgi
-run pip install -r /app/requirements.txt
+RUN pip install -r /app/requirements.txt
 
 
 VOLUME /app
