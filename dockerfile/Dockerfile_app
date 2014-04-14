@@ -15,8 +15,10 @@ RUN rm /etc/nginx/sites-enabled/default
 
 ADD ./ /app
 
-RUN ln -s /app/conf/appserver /etc/nginx/sites-enabled/
-RUN ln -s /app/conf/supervisord.conf /etc/supervisor/conf.d/
+#copy file from repo
+ADD https://raw.githubusercontent.com/barrachri/dockerfiles/master/conf/appserver /etc/nginx/sites-enabled/
+ADD https://raw.githubusercontent.com/barrachri/dockerfiles/master/conf/supervisord.conf /etc/supervisor/conf.d/
+ADD https://raw.githubusercontent.com/barrachri/dockerfiles/master/conf/uwsgi.ini /app/conf/
 
 # run pip install
 RUN pip install uwsgi
