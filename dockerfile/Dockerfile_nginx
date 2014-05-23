@@ -8,23 +8,24 @@ FROM ubuntu:12.04
 # File Author / Maintainer
 MAINTAINER Christian Barra <barrachri@gmail.com>
 RUN apt-get update
-RUN apt-get install -y build-essential git python python-dev python-setuptools python-pip
+RUN apt-get install -y  nginx
 
-ADD ./ /app
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+RUN rm /etc/nginx/sites-enabled/default
+
+#copy file from repo
+ADD https://raw.githubusercontent.com/barrachri/dockerfiles/master/conf/appserver /etc/nginx/sites-enabled/
+ADD https://raw.githubusercontent.com/barrachri/dockerfiles/master/conf/supervisord.conf /etc/supervisor/conf.d/
 
 # if you need to modify this conf (maybe your wsgi file is not in api/wsgi.py dir) you can simple curl this file
 # and change whatever you want and use ./uswgi.ini rather than my rawfiles url. 
 ADD https://raw.githubusercontent.com/barrachri/dockerfiles/master/conf/uwsgi.ini /app/conf/
 
-# run pip install
-RUN pip install uwsgi
-RUN pip install -r /app/requirements.txt
+VOLUME /etc/nginx/sites-enabled
+VOLUME /var/log/nginx
 
-# In this way you  can see this dir from your host machine
-VOLUME /app
-
-
-# Port to expose
+# Expose ports.
 EXPOSE 80
+EXPOSE 443
 
-CMD ["/usr/local/bin/uwsgi" ,"--ini" ,"/app/conf/uwsgi.ini"]
+CMD ["nginx"]

@@ -1,6 +1,6 @@
 # the upstream component nginx needs to connect to
 upstream appserver {
-    server unix:///tmp/uwsgiapp.sock; 
+    server app:8080; 
     }
 
 # configuration of the server
